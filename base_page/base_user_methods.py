@@ -8,11 +8,14 @@ from base_page.base_case import BaseCase
 class UserAPI:
 
     @staticmethod
-    def authenticate_user(email: str, password: str):
+    def authenticate_user():
         """Метод для аутентификации пользователя и получения token, cookie, ID"""
 
         # Данные для аутентификации пользователя
-        data = {'email': email, 'password': password}
+        data = {
+            'email': 'testexample@gmail.com',
+            'password': 'qwerty123'
+        }
 
         # Запрос на аутентификацию
         response = UserAPI.login_user(data)
@@ -20,7 +23,7 @@ class UserAPI:
 
         # Извлекаем и возвращаем cookie, token, user_id из ответа
         return {
-            'headers': {'x-csrf-token': BaseCase.get_header(response, 'x-csrf-token')},
+            'token': {'x-csrf-token': BaseCase.get_header(response, 'x-csrf-token')},
             'cookies': {'auth_sid': BaseCase.get_cookie(response, 'auth_sid')},
             'user_id': BaseCase.get_json_value(response, 'user_id')
         }
