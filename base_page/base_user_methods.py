@@ -8,13 +8,17 @@ from base_page.base_case import BaseCase
 class UserAPI:
 
     @staticmethod
-    def authenticate_user():
+    def authenticate_user(email=None, password=None):
         """Метод для аутентификации пользователя и получения token, cookie, ID"""
 
         # Данные для аутентификации пользователя
+        if email is None:
+            email = 'testexample@gmail.com'
+        if password is None:
+            password = 'qwerty123'
         data = {
-            'email': 'testexample@gmail.com',
-            'password': 'qwerty123'
+            'email': email,
+            'password': password
         }
 
         # Запрос на аутентификацию
