@@ -7,6 +7,8 @@ from base_page.assertions import Assertions
 class TestCreateUser:
 
     def test_create_user_success(self):
+        """Успешное создание нового пользователя"""
+
         user_data = UserAPI.prepare_registration_data()
         response = UserAPI.create_user(user_data)
 
@@ -14,6 +16,8 @@ class TestCreateUser:
         Assertions.assert_json_has_key(response, 'id')
 
     def test_create_user_with_existing_email(self):
+        """Попытка создания нового пользователя с уже существующим email"""
+
         user_data = UserAPI.prepare_registration_data(email='testexample@gmail.com')
         response = UserAPI.create_user(user_data)
 
@@ -22,6 +26,8 @@ class TestCreateUser:
             f"Expected error message: 'Users with email {user_data['email']} already exists', but got: '{response.text}'"
 
     def test_create_user_with_invalid_email(self):
+        """Попытка создания пользователя в некорректным email"""
+
         user_data = UserAPI.prepare_registration_data(email='testexample.com')
         response = UserAPI.create_user(user_data)
 
@@ -44,6 +50,8 @@ class TestCreateUser:
         ('password', 'qwerty'*50, "The value of 'password' field is too long")
     ])
     def test_create_user_with_empty_short_or_long_field(self, field, value, error_message):
+        """Попытка создания пользователя с некорректными данными"""
+
         user_data = UserAPI.prepare_registration_data()
         user_data[field] = value
 
