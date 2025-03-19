@@ -12,17 +12,17 @@ class TestAuthenticationUser:
 
         # Запрос на создание нового пользователя
         user_data = UserAPI.prepare_registration_data()
-        response1 = UserAPI.create_user(user_data)
+        response_create = UserAPI.create_user(user_data)
 
-        Assertions.assert_status_code(response1, 200)
+        Assertions.assert_status_code(response_create, 200)
 
         # Запрос на аутентификацию пользователя
-        response2 = UserAPI.authenticate_user(user_data['email'], user_data['password'])
+        response_auth = UserAPI.authenticate_user(user_data['email'], user_data['password'])
 
         # Проверка, что сервер вернул token, cookie и user_id
-        assert response2['user_id'] is not None, 'The response does not contain "user_id"'
-        assert response2['token'] is not None, 'The response does not contain "token"'
-        assert response2['cookies'] is not None, 'The response does not contain "cookie"'
+        assert response_auth['user_id'] is not None, 'The response does not contain "user_id"'
+        assert response_auth['token'] is not None, 'The response does not contain "token"'
+        assert response_auth['cookies'] is not None, 'The response does not contain "cookie"'
 
     @pytest.mark.parametrize('email', ['test+example@gmail.com',
                                        ' testexample@gmail.com',
