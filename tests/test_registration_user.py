@@ -1,11 +1,14 @@
 import pytest
+import allure
 
 from base_page.base_user_methods import UserAPI
 from base_page.assertions import Assertions
 
 
+@allure.epic('Регистрация пользователей')
 class TestCreateUser:
 
+    @allure.story('Успешное создание пользователя')
     def test_create_user_success(self):
         """Успешное создание нового пользователя"""
 
@@ -15,6 +18,7 @@ class TestCreateUser:
         Assertions.assert_status_code(response, 200)
         Assertions.assert_json_has_key(response, 'id')
 
+    @allure.story('Создание пользователя с уже существующим email')
     def test_create_user_with_existing_email(self):
         """Попытка создания нового пользователя с уже существующим email"""
 
@@ -25,6 +29,7 @@ class TestCreateUser:
         assert response.text == f"Users with email '{user_data['email']}' already exists", \
             f"Expected error message: 'Users with email {user_data['email']} already exists', but got: '{response.text}'"
 
+    @allure.story('Создание пользователя с некорректным email')
     def test_create_user_with_invalid_email(self):
         """Попытка создания пользователя в некорректным email"""
 
@@ -49,6 +54,7 @@ class TestCreateUser:
         ('lastName', 'qwerty'*50, "The value of 'lastName' field is too long"),
         ('password', 'qwerty'*50, "The value of 'password' field is too long")
     ])
+    @allure.story('Создание пользователя с некорректными данными')
     def test_create_user_with_empty_short_or_long_field(self, field, value, error_message):
         """Попытка создания пользователя с некорректными данными"""
 

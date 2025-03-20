@@ -1,12 +1,15 @@
 import pytest
+import allure
 
 from base_page.base_user_methods import UserAPI
 from base_page.assertions import Assertions
 from base_page.base_case import BaseCase
 
 
+@allure.epic('Удаление пользователя')
 class TestDeleteUser:
 
+    @allure.story('Успешное удаление пользователя и проверка, что пользователь был удален')
     def test_delete_user_success_and_check_deleted(self):
         """Удаление только что созданного пользователя"""
 
@@ -42,6 +45,7 @@ class TestDeleteUser:
         assert response_get.text == error_message, \
             f'Expected error message: "{error_message}", but got: "{response_get.text}"'
 
+    @allure.story('Удаление стороннего пользователя после авторизации')
     def test_delete_other_user(self):
         """Попытка удаления другого пользователя после успешной авторизации"""
 
@@ -65,6 +69,7 @@ class TestDeleteUser:
         assert expected_error_message == actual_error_message, \
             f'Expected error message: "{expected_error_message}", but got: "{actual_error_message}"'
 
+    @allure.story('Удаление несуществующего пользователя')
     def test_delete_non_existent_user(self):
         """Попытка удаления несуществующего пользователя"""
 
@@ -80,6 +85,7 @@ class TestDeleteUser:
 
         Assertions.assert_status_code(response_delete, 404)
 
+    @allure.story('Удаление пользователя без авторизации')
     def test_delete_user_without_auth(self):
         """Попытка удаления пользователя без авторизации"""
 

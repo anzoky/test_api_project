@@ -1,12 +1,14 @@
+import allure
 import pytest
 
 from base_page.base_user_methods import UserAPI
 from base_page.assertions import Assertions
-from base_page.base_case import BaseCase
 
 
+@allure.epic('Аутентификация пользователя')
 class TestAuthenticationUser:
 
+    @allure.story('Успешная аутентификация пользователя')
     def test_login_new_user(self):
         """Тест на проверку успешной аутентификации нового пользователя"""
 
@@ -42,6 +44,7 @@ class TestAuthenticationUser:
                                        '><script>alert("Hacked")</script>',
                                        '<img src=x onerror=alert("XSS")>'
                                        ])
+    @allure.story('Аутентификация с некорректным email: "{email}"')
     def test_auth_with_invalid_email(self, email):
         """Проверка аутентификации пользователя с неверными и некорректными email, но верным паролем,
         а также с потенциальными XSS-атакой и SQL-инъекцией"""
@@ -76,6 +79,7 @@ class TestAuthenticationUser:
                                           '><script>alert("Hacked")</script>',
                                           '<img src=x onerror=alert("XSS")>'
                                           ])
+    @allure.story('Аутентификация пользователя с некорректным паролем')
     def test_auth_with_invalid_password(self, password):
         """Проверка аутентификации пользователя с неверными и некорректными паролями, но верным email,
         а также с потенциальными XSS-атакой и SQL-инъекцией"""
@@ -100,6 +104,7 @@ class TestAuthenticationUser:
         ('testexample@gmail.com', ''),
         ('', '')
     ])
+    @allure.story('Аутентификация пользователя с пустыми полями')
     def test_auth_with_empty_fields(self, email, password):
         """Проверка аутентификации пользователя с пустыми полями"""
 

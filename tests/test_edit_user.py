@@ -1,12 +1,15 @@
 import pytest
+import allure
 
 from base_page.base_user_methods import UserAPI
 from base_page.assertions import Assertions
 from base_page.base_case import BaseCase
 
 
+@allure.epic('Изменение данных о пользователе')
 class TestUserEdit:
 
+    @allure.story('Успешное изменение имени пользователя')
     def test_edit_user_success(self):
         """Проверка редактирования пользователя
         В данном случае меняем имя нового пользователя после его создания"""
@@ -46,6 +49,7 @@ class TestUserEdit:
         assert name_for_change == changed_name, \
             f'The name has not been changed. Expected: "{name_for_change}", actual: "{changed_name}"'
 
+    @allure.story('Изменение данных у неавторизованного пользователя')
     def test_edit_user_unauthorized(self):
         """Попытка редактирования пользователя без авторизации"""
 
@@ -74,6 +78,7 @@ class TestUserEdit:
         assert expected_error_message == actual_error_message, \
             f'Expected error message: "{expected_error_message}", but got: "{actual_error_message}"'
 
+    @allure.story('Изменение email пользователя на некорректный')
     def test_edit_user_invalid_email(self):
         """Попытка редактирования email пользователя на некорректный"""
 
@@ -111,6 +116,7 @@ class TestUserEdit:
         ('a', 'The value for field `firstName` is too short'),
         ('qwerty'*100, 'The value for field `firstName` is too long')
     ])
+    @allure.story('Изменение имени пользователя на некорректное')
     def test_edit_user_incorrect_firstname(self, name, expected_error):
         """Попытка редактирования имени пользователя на пустое, короткое или слишком длинное"""
 

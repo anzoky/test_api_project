@@ -1,11 +1,14 @@
 import pytest
+import allure
 
 from base_page.base_user_methods import UserAPI
 from base_page.assertions import Assertions
 
 
+@allure.epic('Получение информации о пользователях')
 class TestGetUser:
 
+    @allure.story('Получение информации о пользователе по ID без аутентификации')
     def test_get_user_without_authentication(self):
         """Получение информации о пользователе по ID без аутентификации
         Сервер должен вернуть только username пользователя"""
@@ -17,6 +20,7 @@ class TestGetUser:
         Assertions.assert_json_has_key(response, 'username')
         Assertions.assert_json_has_no_keys(response, ['email', 'firstName', 'lastName'])
 
+    @allure.story('Получение информации о пользователе с аутентификацией')
     def test_get_user_with_authentication(self):
         """Получение информации о пользователе с аутентификацией
         Сервер должен вернуть username, email, firstName, lastName"""
@@ -36,6 +40,7 @@ class TestGetUser:
         Assertions.assert_status_code(response_get, 200)
         Assertions.assert_json_has_keys(response_get, expected_fields)
 
+    @allure.story('Получение информации о стороннем пользователе с аутентификацией')
     def test_get_other_user_data_with_auth(self):
         """Получение информации о другом пользователе с аутентификацией
         (в ответе должны быть скрыты все поля, кроме 'username')"""
@@ -53,6 +58,7 @@ class TestGetUser:
         Assertions.assert_json_has_key(response_get, 'username')
         Assertions.assert_json_has_no_keys(response_get, ['email', 'firstName', 'lastName'])
 
+    @allure.story('Получение информации о несуществующем пользователе')
     def test_get_nonexistent_user(self):
         """Получение информации о несуществующем пользователе"""
 
@@ -63,6 +69,7 @@ class TestGetUser:
         assert response.text == 'User not found', \
             f'Expected error message: "User not found", but got: "{response.text}"'
 
+    @allure.story('Получение информации о пользователе с ошибкой аутентификации')
     def test_get_user_with_invalid_auth(self):
         """Попытка получения информации о пользователе с ошибкой аутентификации
         (неверные token, cookie, но верный user_id)
