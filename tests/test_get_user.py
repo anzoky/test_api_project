@@ -22,36 +22,36 @@ class TestGetUser:
         Сервер должен вернуть username, email, firstName, lastName"""
 
         # Отправка POST-запроса на аутентификацию с email и password
-        response1 = UserAPI.authenticate_user()
+        response_auth = UserAPI.authenticate_user()
 
         # Оправка GET-запроса на получение данных о пользователе и использованием аутентификации
-        response2 = UserAPI.get_user_info(response1['user_id'],
-                                          headers=response1['token'],
-                                          cookies=response1['cookies']
-                                          )
+        response_get = UserAPI.get_user_info(response_auth['user_id'],
+                                             headers=response_auth['token'],
+                                             cookies=response_auth['cookies']
+                                             )
 
         expected_fields = ['id', 'username', 'email', 'firstName', 'lastName']
 
         # Проверка, что сервер вернул все ожидаемые поля
-        Assertions.assert_status_code(response2, 200)
-        Assertions.assert_json_has_keys(response2, expected_fields)
+        Assertions.assert_status_code(response_get, 200)
+        Assertions.assert_json_has_keys(response_get, expected_fields)
 
     def test_get_other_user_data_with_auth(self):
         """Получение информации о другом пользователе с аутентификацией
         (в ответе должны быть скрыты все поля, кроме 'username')"""
 
         # Отправка POST-запроса на аутентификацию с email и password
-        response1 = UserAPI.authenticate_user()
+        response_auth = UserAPI.authenticate_user()
 
         # Отправка GET-запроса на получение информации о пользователе с использованием аутентификации,
         # (используется ID другого пользователя)
-        response2 = UserAPI.get_user_info('119303',
-                                          headers=response1['token'],
-                                          cookies=response1['cookies'])
+        response_get = UserAPI.get_user_info('119303',
+                                             headers=response_auth['token'],
+                                             cookies=response_auth['cookies'])
 
-        Assertions.assert_status_code(response2,  200)
-        Assertions.assert_json_has_key(response2, 'username')
-        Assertions.assert_json_has_no_keys(response2, ['email', 'firstName', 'lastName'])
+        Assertions.assert_status_code(response_get,  200)
+        Assertions.assert_json_has_key(response_get, 'username')
+        Assertions.assert_json_has_no_keys(response_get, ['email', 'firstName', 'lastName'])
 
     def test_get_nonexistent_user(self):
         """Получение информации о несуществующем пользователе"""
@@ -69,17 +69,17 @@ class TestGetUser:
         Сервер должен вернуть только username пользователя"""
 
         # Отправка POST-запроса на аутентификацию с email и password
-        response1 = UserAPI.authenticate_user()
+        response_auth = UserAPI.authenticate_user()
 
         # Неверные данные для аутентификации
         headers = {"x-csrf-token": "invalid_token"}
         cookies = {"auth_sid": "invalid_cookie"}
 
         # Отправка GET-запроса на получение информации о пользователе с использованием аутентификации
-        response2 = UserAPI.get_user_info(response1['user_id'],
-                                          headers=headers,
-                                          cookies=cookies)
+        response_get = UserAPI.get_user_info(response_auth['user_id'],
+                                             headers=headers,
+                                             cookies=cookies)
 
-        Assertions.assert_status_code(response2,  200)
-        Assertions.assert_json_has_key(response2, 'username')
-        Assertions.assert_json_has_no_keys(response2, ['email', 'firstName', 'lastName'])
+        Assertions.assert_status_code(response_get,  200)
+        Assertions.assert_json_has_key(response_get, 'username')
+        Assertions.assert_json_has_no_keys(response_get, ['email', 'firstName', 'lastName'])
