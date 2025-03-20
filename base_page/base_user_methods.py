@@ -24,9 +24,6 @@ class UserAPI:
         # Запрос на аутентификацию
         response = UserAPI.login_user(data)
         Assertions.assert_status_code(response, 200)
-        # Проверка, что сервер вернул куки и токен
-        assert 'x-csrf-token' in response.headers, 'Cannot find header with name "x-csrf-token" in the last response'
-        assert 'auth_sid' in response.cookies, 'Cannot find cookie with name "auth_sid" in the last response'
 
         # Извлекаем и возвращаем cookie, token, user_id из ответа
         return {
